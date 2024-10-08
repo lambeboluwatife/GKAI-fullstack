@@ -1,0 +1,56 @@
+{
+  "name": "gkai",
+  "version": "1.0.0",
+  "description": "A logical and thinking game.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lambeboluwatife/GKAI-fullstack.git"
+  },
+  "keywords": [
+    "game",
+    "thinking",
+    "logical",
+    "reasoning"
+  ],
+  "author": "Lambe Boluwatife",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lambeboluwatife/GKAI-fullstack/issues"
+  },
+  "homepage": "https://github.com/lambeboluwatife/GKAI-fullstack#readme",
+  "dependencies": {
+    "@hapi/joi": "^17.1.1",
+    "@types/cors": "^2.8.17",
+    "bcryptjs": "^2.4.3",
+    "cloudinary": "^2.2.0",
+    "colors": "^1.4.0",
+    "cors": "^2.8.5",
+    "cron-job": "^1.0.3",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-rate-limit": "^7.4.0",
+    "express-session": "^1.18.0",
+    "jsonwebtoken": "^9.0.2",
+    "moment": "^2.30.1",
+    "mongoose": "^8.4.4",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "node-cache": "^5.1.2",
+    "node-cron": "^3.0.3",
+    "nodemailer": "^6.9.14",
+    "passport": "^0.7.0",
+    "passport-local": "^1.0.0",
+    "qrcode": "^1.5.3",
+    "redis": "^4.7.0",
+    "winston": "^3.13.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.7"
+  }
+}
