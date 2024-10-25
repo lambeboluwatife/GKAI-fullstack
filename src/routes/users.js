@@ -11,3 +11,5 @@ router.route("/register").post(upload.single("profilePicture"), registerUser);
 router.route("/logout").get(logoutUser);
 
 module.exports = router;
+
+// MONGO_URI=mongodb://localhost:27017/gkai

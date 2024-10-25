@@ -39,13 +39,10 @@ exports.registerUser = async (req, res) => {
           profilePicture: result.secure_url,
         });
 
-        // Mash Password
         bcrypt.genSalt(10, (err, salt) =>
           bcrypt.hash(newUser.password, salt, async (err, hash) => {
             if (err) throw err;
-            // Set password to hashed
             newUser.password = hash;
-            // Save user
             const savedUser = await newUser.save();
 
             res.status(201).json({
