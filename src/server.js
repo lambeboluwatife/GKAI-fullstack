@@ -57,12 +57,14 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 const users = require("./routes/users");
+const game = require("./routes/game");
 
 app.get("/", (req, res) => {
   res.send("hello, welcome to GKAI");
 });
 
 app.use("/api/auth", users);
+app.use("/api/game", game);
 
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));

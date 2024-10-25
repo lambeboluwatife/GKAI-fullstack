@@ -33,23 +33,25 @@ exports.generateToken = async (req, res) => {
 };
 
 exports.verifyToken = (req, res, next) => {
-  const bearerHeader = req.headers["authorization"];
-  if (bearerHeader) {
-    const bearer = bearerHeader.split(" ");
-    if (bearer.length === 2) {
-      const bearerToken = bearer[1];
-      req.token = bearerToken;
-      next();
-    } else {
-      return res.status(400).json({
-        success: false,
-        message: "Malformed token",
-      });
-    }
-  } else {
+  const token =
+    req.headers["authorization"] && req.headers["authorization"].split(" ")[1];
+
+  if (!token) {
     return res.status(401).json({
       success: false,
-      message: "Unauthorized: Missing Authorization header",
+      message: "Unauthorized: Missing token",
     });
   }
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+    if (err) {
+      return res.status(403).json({
+        success: false,
+        message: "Invalid token",
+      });
+    }
+
+    req.user = decoded.user;
+    next();
+  });
 };
