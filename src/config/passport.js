@@ -14,7 +14,7 @@ passport.use(
       try {
         const user = await User.findOne({ email });
         if (!user) {
-          return done(null, false, { message: "Incorrect email or password." });
+          return done(null, false, { message: "Invalid Credentials" });
         }
 
         // Match Password
@@ -27,7 +27,7 @@ passport.use(
             return done(null, user);
           } else {
             return done(null, false, {
-              message: "Incorrect email or password.",
+              message: "Invalid Credentials",
             });
           }
         });
