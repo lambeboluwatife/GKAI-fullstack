@@ -28,6 +28,19 @@ const userSchema = new mongoose.Schema({
   rank: {
     type: String,
   },
+  gamesInitiated: [
+    {
+      gameId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Game",
+        required: true,
+      },
+      difficulty: { type: String, required: true },
+      gameType: { type: String, required: true },
+      endResult: { type: String, default: "undecided" },
+      status: { type: String, default: "in-progress" },
+    },
+  ],
   totalGamesPlayed: {
     type: Number,
     default: 0,

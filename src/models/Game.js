@@ -6,6 +6,14 @@ const gameSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
+  difficulty: {
+    type: String,
+    required: true,
+  },
+  gameType: {
+    type: String,
+    required: true,
+  },
   randomNumbers: { type: [Number], required: true },
   moves: [
     {
@@ -15,6 +23,7 @@ const gameSchema = new mongoose.Schema({
       timestamp: { type: Date, default: Date.now },
     },
   ],
+  endResult: { type: String, default: "undecided" },
   status: { type: String, default: "in-progress" },
   startDate: { type: Date, default: Date.now },
   lastUpdated: { type: Date, default: Date.now },
