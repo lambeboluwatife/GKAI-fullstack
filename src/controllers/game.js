@@ -1,11 +1,33 @@
 const Game = require("../models/Game");
+const User = require("../models/User");
+
+const { ObjectId } = require("mongodb");
 
 exports.gameStart = async (req, res) => {
+  const { difficulty, gameType } = req.body;
   const randomNumbers = generateUniqueRandomNumbers();
-  const game = new Game({ playerId: req.user._id, randomNumbers });
+  const game = new Game({
+    playerId: req.user._id,
+    randomNumbers,
+    difficulty,
+    gameType,
+  });
 
   try {
     const savedGame = await game.save();
+    const user = await User.findById(req.user._id);
+
+    const newGame = {
+      gameId: savedGame._id,
+      difficulty: savedGame.difficulty,
+      gameType: savedGame.gameType,
+      endResult: savedGame.endResult,
+      status: savedGame.status,
+    };
+
+    user.gamesInitiated.push(newGame);
+    await user.save();
+
     res
       .status(201)
       .json({ gameId: savedGame._id, message: "Game started successfully!" });
@@ -20,6 +42,10 @@ exports.gameMove = async (req, res) => {
 
   try {
     const game = await Game.findById(gameId);
+    const user = await User.findOne({
+      _id: req.user._id,
+      "gamesInitiated.gameId": new ObjectId(gameId),
+    });
 
     if (!game) {
       return res.status(400).json({ message: "Invalid game ID" });
@@ -37,13 +63,35 @@ exports.gameMove = async (req, res) => {
     game.moves.push({ guess, killed, injured });
     game.lastUpdated = new Date();
 
-    if (killed === 4) {
+    if (
+      (game.difficulty === "normal" && game.moves.length === 15) ||
+      (game.difficulty === "hard" && game.moves.length === 10) ||
+      (game.difficulty === "bossman" && game.moves.length === 7)
+    ) {
+      game.endResult = "lost";
+      game.status = "completed";
+    } else if (killed === 4) {
+      game.endResult = "won";
       game.status = "completed";
     }
 
     await game.save();
+
+    if (game.status === "completed") {
+      await User.updateOne(
+        { _id: req.user._id, "gamesInitiated.gameId": new ObjectId(gameId) },
+        {
+          $set: {
+            "gamesInitiated.$.endResult": game.endResult,
+            "gamesInitiated.$.status": game.status,
+          },
+        }
+      );
+    }
+
     res.json({ killed, injured, status: game.status, moves: game.moves });
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: "Error processing move", error });
   }
 };

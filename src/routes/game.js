@@ -9,5 +9,3 @@ router.route("/:gameId/move").post(verifyToken, gameMove);
 router.route("/:gameId/resume").get(verifyToken, resumeGame);
 
 module.exports = router;
-
-// MONGO_URI=mongodb://localhost:27017/gkai
