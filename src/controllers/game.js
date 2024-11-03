@@ -96,6 +96,26 @@ exports.gameMove = async (req, res) => {
   }
 };
 
+exports.getOngoingGame = async (req, res) => {
+  try {
+    const games = await Game.find({
+      status: "in-progress",
+      playerId: req.user._id,
+    });
+
+    if (!games) {
+      return res.status(200).json({ message: "No ongoing game(s)" });
+    }
+
+    return res.status(200).json({ games });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error fetching game",
+      error,
+    });
+  }
+};
+
 exports.resumeGame = async (req, res) => {
   try {
     const game = await Game.findById(req.params.gameId);
